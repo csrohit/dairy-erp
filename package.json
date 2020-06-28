@@ -1,0 +1,24 @@
+{
+  "name": "dairy",
+  "version": "1.0.0",
+  "description": "ERP system for dairy management",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/csrohit/dairy-erp.git"
+  },
+  "keywords": [
+    "dairy",
+    "erp",
+    "mean"
+  ],
+  "author": "Rohit Nimkar",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/csrohit/dairy-erp/issues"
+  },
+  "homepage": "https://github.com/csrohit/dairy-erp#readme"
+}
