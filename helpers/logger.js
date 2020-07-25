@@ -1,36 +1,39 @@
-import winston from "winston";
-import colorize from 'json-colorizer';
+const {createLogger, format, transports} = require('winston'),
+    colorize = require('json-colorizer');
 
-export const logger = new winston.createLogger({
-  format: winston.format.combine(
-    winston.format.timestamp(),
-    winston.format.errors({stack: true}),
-    winston.format.json(),
-    winston.format.prettyPrint(),
-    winston.format.colorize(),
+const logger = new createLogger({
+  format: format.combine(
+    format.timestamp(),
+    format.errors({stack: true}),
+    format.json(),
+    format.prettyPrint(),
+    format.colorize(),
   ),
-  exceptionHandlers: [
-    new winston.transports.File({ filename: './logs/exceptions.log' })
-  ],
+  // exceptionHandlers: [
+  //   new transports.File({ filename: './logs/exceptions.log' }),
+  //   new transports.Console({
+  //     format: format.simple()
+  //   })
+  // ],
     transports: [
-    // new winston.transports.File({ filename: './logs/error.log', level: 'error' }),
-    // new winston.transports.File({ filename: './logs/combined.log' }),
+    // new transports.File({ filename: './logs/error.log', level: 'error' }),
+    // new transports.File({ filename: './logs/combined.log' }),
   ]
 });
 
 // when in development print logs to the console
 if (process.env.NODE_ENV !== 'production') {
   logger.add(
-    new winston.transports.Console({
-      format: winston.format.combine(
-        winston.format.colorize(),
-        winston.format.align(),
-        winston.format.timestamp({
+    new transports.Console({
+      format: format.combine(
+        format.colorize(),
+        format.align(),
+        format.timestamp({
           format: function(){
             return new Date(Date.now() + 330 * 60000).toUTCString().replace("GMT", "IST");
           },
         }),
-        winston.format.printf(info => {
+        format.printf(info => {
           let {timestamp, level, message, ...meta } = info;
           // print data from the meta object
           let log = `${timestamp} | ${level} |`;
@@ -52,5 +55,4 @@ logger.stream = {
     logger.info('Req => ',{data: data.replace('\n', '')});
   },
 };
-
-export default logger
+module.exports = logger

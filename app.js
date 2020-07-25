@@ -1,10 +1,12 @@
-import express from 'express'
-import mongoose from 'mongoose'
-import morgan from 'morgan'
+const express = require('express'),
+    mongoose = require('mongoose'),
+    morgan = require('morgan');
 
 
-import {db_host, db_name, port} from './config.mjs'
-import logger from './helpers/logger.mjs'
+const {db_host, db_name, port} = require('./config'),
+    logger = require('./helpers/logger'),
+    index = require('./routes/index');
+
 const app = express();
 
 // let express know that it is running behind proxy
@@ -13,10 +15,10 @@ app.set('trust proxy', 'loopback');
 //* connect to database
 // mongoose.connect(db_host+'/'+db_name, { useUnifiedTopology: true, useNewUrlParser: true, useCreateIndex: true })
 //     .then(() => {
-//         console.log(`connected to database ${db_name}`);
+//         logger.info(`connected to database ${db_name}`);
 //     }).catch( err => {
 //         //* In case of failed connection close the server
-//         console.debug('Could not connect to database', db_name);
+//         logger.error('Could not connect to database', db_name);
 //         process.kill(process.pid, 'SIGTERM');
 //     });
 
@@ -36,10 +38,12 @@ morgan.token('host', function(req, res) {
     return req.hostname;
 });
 
-app.get('/', (req, res) => {
-    throw Error("lwjfhkjk");
-    return res.json({success: true});
-});
+// routes
+app.use('/', index)
+
+
+
+
 // error handling middleware
 app.use((err, req, res, next) => {
     logger.error(err);
