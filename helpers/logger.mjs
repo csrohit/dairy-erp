@@ -5,21 +5,20 @@ import colorize from 'json-colorizer';
 
 const { createLogger, format, transports } = winston;
 
-const myFormat = format.combine(
-  format.timestamp(),
-  format.errors({stack: true}),
-  format.json(),
-  format.prettyPrint(),
-  format.colorize(),
-);
-
 const logger = new createLogger({
-  exceptionHandlers: [
-    new transports.File({ filename: './logs/exceptions.log', format: myFormat }),
-    new transports.Console({
-      format: format.simple()
-    })
-  ],
+  format: format.combine(
+    format.timestamp(),
+    format.errors({stack: true}),
+    format.json(),
+    format.prettyPrint(),
+    format.colorize(),
+  ),
+  // exceptionHandlers: [
+  //   new transports.File({ filename: './logs/exceptions.log' }),
+  //   new transports.Console({
+  //     format: format.simple()
+  //   })
+  // ],
     transports: [
     // new transports.File({ filename: './logs/error.log', level: 'error' }),
     // new transports.File({ filename: './logs/combined.log' }),
@@ -31,7 +30,6 @@ if (process.env.NODE_ENV !== 'production') {
   logger.add(
     new transports.Console({
       format: format.combine(
-        myFormat,
         format.colorize(),
         format.align(),
         format.timestamp({

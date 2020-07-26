@@ -1,6 +1,10 @@
 import express from 'express'
 
+import userRoute from './user.mjs';
 const index = express.Router();
+
+index.use('/user', userRoute);
+
 
 
 index.get('/', (req, res) => {
