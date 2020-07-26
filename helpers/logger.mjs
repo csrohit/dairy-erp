@@ -13,14 +13,12 @@ const logger = new createLogger({
     format.prettyPrint(),
     format.colorize(),
   ),
-  // exceptionHandlers: [
-  //   new transports.File({ filename: './logs/exceptions.log' }),
-  //   new transports.Console({
-  //     format: format.simple()
-  //   })
-  // ],
+  exceptionHandlers: [
+    new transports.File({ filename: './logs/exceptions.log' }),
+    new transports.Console()
+  ],
     transports: [
-    // new transports.File({ filename: './logs/error.log', level: 'error' }),
+    new transports.File({ filename: './logs/error.log', level: 'error' }),
     // new transports.File({ filename: './logs/combined.log' }),
   ]
 });
@@ -29,6 +27,7 @@ const logger = new createLogger({
 if (process.env.NODE_ENV !== 'production') {
   logger.add(
     new transports.Console({
+      level: 'debug',
       format: format.combine(
         format.colorize(),
         format.align(),

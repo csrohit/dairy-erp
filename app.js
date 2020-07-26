@@ -86,6 +86,10 @@ process.on('SIGINT', () => {
     process.exit(1);
 });
 
+// winston doesn't handled promise rejection exception, handle those rejection here and pass on to winston
+process.on('unhandledRejection', (reason, promise) => {
+    throw reason;
+});
 
 /* 
     ? When having problems with nodemon and getting error of `uncaughtException: listen EADDRINUSE: address already in use :::3000`
