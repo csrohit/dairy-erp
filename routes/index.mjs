@@ -1,6 +1,6 @@
 import express from 'express'
 
-import userRoute from './user.mjs';
+import userRoute from './controllers/userController.mjs';
 const index = express.Router();
 
 index.use('/user', userRoute);

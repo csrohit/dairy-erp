@@ -10,6 +10,7 @@
 import express from 'express';
 import mongoose from 'mongoose';
 import morgan from 'morgan';
+import bodyParser from 'body-parser';
 
 import { db_host, db_name, port } from './config.mjs';
 import logger from './helpers/logger.mjs';
@@ -23,14 +24,14 @@ const app = express();
 app.set('trust proxy', 'loopback');
 
 //* connect to database
-// mongoose.connect(db_host+'/'+db_name, { useUnifiedTopology: true, useNewUrlParser: true, useCreateIndex: true })
-//     .then(() => {
-//         logger.info(`connected to database ${db_name}`);
-//     }).catch( err => {
-//         //* In case of failed connection close the server
-//         logger.error('Could not connect to database', db_name);
-//         process.kill(process.pid, 'SIGTERM');
-//     });
+mongoose.connect(db_host+'/'+db_name, { useUnifiedTopology: true, useNewUrlParser: true, useCreateIndex: true })
+    .then(() => {
+        logger.info(`connected to database ${db_name}`);
+    }).catch( err => {
+        //* In case of failed connection close the server
+        logger.error('Could not connect to database', db_name);
+        process.kill(process.pid, 'SIGTERM');
+    });
 
 /* App level middleware */
 // morgan logging
@@ -48,10 +49,12 @@ morgan.token('host', function(req, res) {
     return req.hostname;
 });
 
+// Only using json for api
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({extended: false}));
+
 // routes
-app.use('/', index)
-
-
+app.use('/', index);
 
 
 // error handling middleware
