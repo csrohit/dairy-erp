@@ -1,5 +1,6 @@
 {
   "name": "dairy",
+  "type": "module",
   "version": "1.0.0",
   "description": "ERP system for dairy management",
   "main": "app.js",

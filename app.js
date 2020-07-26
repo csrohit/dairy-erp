@@ -1,11 +1,21 @@
-const express = require('express'),
-    mongoose = require('mongoose'),
-    morgan = require('morgan');
+// const express = require('express'),
+//     mongoose = require('mongoose'),
+//     morgan = require('morgan');
 
 
-const {db_host, db_name, port} = require('./config'),
-    logger = require('./helpers/logger'),
-    index = require('./routes/index');
+// const {db_host, db_name, port} = require('./config'),
+//     logger = require('./helpers/logger'),
+    // index = require('./routes/index');
+
+import express from 'express';
+import mongoose from 'mongoose';
+import morgan from 'morgan';
+
+import { db_host, db_name, port } from './config.mjs';
+import logger from './helpers/logger.mjs';
+import index from './routes/index.mjs';
+
+
 
 const app = express();
 

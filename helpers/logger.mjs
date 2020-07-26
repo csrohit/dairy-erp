@@ -1,20 +1,25 @@
-const {createLogger, format, transports} = require('winston'),
-    colorize = require('json-colorizer');
+// const {createLogger, format, transports} = require('winston'),
+//     colorize = require('json-colorizer');
+import winston from 'winston';
+import colorize from 'json-colorizer';
+
+const { createLogger, format, transports } = winston;
+
+const myFormat = format.combine(
+  format.timestamp(),
+  format.errors({stack: true}),
+  format.json(),
+  format.prettyPrint(),
+  format.colorize(),
+);
 
 const logger = new createLogger({
-  format: format.combine(
-    format.timestamp(),
-    format.errors({stack: true}),
-    format.json(),
-    format.prettyPrint(),
-    format.colorize(),
-  ),
-  // exceptionHandlers: [
-  //   new transports.File({ filename: './logs/exceptions.log' }),
-  //   new transports.Console({
-  //     format: format.simple()
-  //   })
-  // ],
+  exceptionHandlers: [
+    new transports.File({ filename: './logs/exceptions.log', format: myFormat }),
+    new transports.Console({
+      format: format.simple()
+    })
+  ],
     transports: [
     // new transports.File({ filename: './logs/error.log', level: 'error' }),
     // new transports.File({ filename: './logs/combined.log' }),
@@ -26,6 +31,7 @@ if (process.env.NODE_ENV !== 'production') {
   logger.add(
     new transports.Console({
       format: format.combine(
+        myFormat,
         format.colorize(),
         format.align(),
         format.timestamp({
@@ -38,7 +44,7 @@ if (process.env.NODE_ENV !== 'production') {
           // print data from the meta object
           let log = `${timestamp} | ${level} |`;
           log += message? ` ${message} |`:'';
-          log += meta.data?`\n ${colorize(meta.data)} | `:''
+          log += meta.data?` ${colorize(meta.data)} | `:''
           log += meta.stack?`\n ${meta.stack}`:''
           return  log
         }),
@@ -55,4 +61,4 @@ logger.stream = {
     logger.info('Req => ',{data: data.replace('\n', '')});
   },
 };
-module.exports = logger
+export default logger;
