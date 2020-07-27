@@ -23,16 +23,24 @@ router.get('/', async (req, res) => {
 
 router.post('/', async (req, res) => {
     try{
-        let address = {
-            villTown: req.body.villTown
-        }
         let dairy = new Dairy({
             title: req.body.title,
             manager: req.body.manager,
-            address: address,
+            address: req.body.address,
             phone: req.body.phone,
+            email: req.body.email,
+            password: req.body.password,
+            location: req.body.location,
+            rate: req.body.rate
         });
+
+/* 
+    TODO: rate field should include rates for all the types of milk.
+        currently it is set to `Number` and defaults to cow milk
+*/
+
         dairy = (await dairy.save()).toObject();
+        delete dairy.password
         return res.json({dairy});
     }catch(e){
         // if error is validationError then send validatorErrors s response
